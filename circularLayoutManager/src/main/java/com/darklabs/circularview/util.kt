@@ -31,7 +31,7 @@ fun createGravityFromAttr(attr: Int): Int {
     return when (attr) {
         0 -> Gravity.START
         1 -> Gravity.END
-        else -> Gravity.START
+        else -> throw IllegalArgumentException("Attribute not supported")
     }
 }
 
@@ -39,7 +39,7 @@ fun createOrientationFromAttr(attr: Int): Int {
     return when (attr) {
         0 -> Orientation.HORIZONTAL
         1 -> Orientation.VERTICAL
-        else -> Orientation.VERTICAL
+        else -> throw IllegalArgumentException("Attribute not supported")
     }
 }
 

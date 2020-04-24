@@ -39,12 +39,14 @@ class CircularLayoutManager : LinearLayoutManager {
      * @param isRotating   Should the items rotate as if on a turning surface, or should they maintain
      *                     their angle with respect to the screen as they orbit the center point?
      */
-    constructor(context: Context?,
-                @Gravity gravity: Int = Gravity.START,
-                @Orientation orientation: Int = Orientation.VERTICAL,
-                @Dimension radius: Int = DEFAULT_RADIUS,
-                @Dimension peekDistance: Int = DEFAULT_PEEK,
-                isRotating: Boolean = false) : super(context, orientation, false) {
+    constructor(
+        context: Context?,
+        @Gravity gravity: Int = Gravity.START,
+        @Orientation orientation: Int = Orientation.VERTICAL,
+        @Dimension radius: Int = DEFAULT_RADIUS,
+        @Dimension peekDistance: Int = DEFAULT_PEEK,
+        isRotating: Boolean = false
+    ) : super(context, orientation, false) {
         this.mRadius = max(radius, MIN_RADIUS)
         this.mGravity = gravity
         this.mPeekDistance = min(max(peekDistance, MIN_PEEK), radius)
@@ -53,19 +55,38 @@ class CircularLayoutManager : LinearLayoutManager {
     }
 
 
-    constructor(context: Context,
-                attr: AttributeSet,
-                defStyleAttr: Int,
-                defStyleRes: Int
+    constructor(
+        context: Context,
+        attr: AttributeSet,
+        defStyleAttr: Int,
+        defStyleRes: Int
     ) : super(context, attr, defStyleAttr, defStyleRes) {
 
-        with(context.obtainStyledAttributes(
+        with(
+            context.obtainStyledAttributes(
                 attr,
                 R.styleable.RecyclerView,
                 defStyleAttr,
-                defStyleRes)) {
-            super.setOrientation(createOrientationFromAttr(R.styleable.RecyclerView_orientation))
-            setGravity(createGravityFromAttr(R.styleable.RecyclerView_gravity))
+                defStyleRes
+            )
+        ) {
+            super.setOrientation(
+                createOrientationFromAttr(
+                    getInt(
+                        R.styleable.RecyclerView_orientation,
+                        Orientation.VERTICAL
+                    )
+                )
+            )
+
+            setGravity(
+                createGravityFromAttr(
+                    getInt(
+                        R.styleable.RecyclerView_gravity,
+                        Gravity.START
+                    )
+                )
+            )
             setRadius(getInt(R.styleable.RecyclerView_radius, DEFAULT_RADIUS))
             setPeekDistance(getInt(R.styleable.RecyclerView_peekDistance, DEFAULT_PEEK))
             setRotating(getBoolean(R.styleable.RecyclerView_isRotating, false))
@@ -95,26 +116,29 @@ class CircularLayoutManager : LinearLayoutManager {
     }
 
     override fun scrollVerticallyBy(
-            dy: Int,
-            recycler: Recycler,
-            state: RecyclerView.State): Int {
+        dy: Int,
+        recycler: Recycler,
+        state: RecyclerView.State
+    ): Int {
         val by = super.scrollVerticallyBy(dy, recycler, state)
         setChildOffsetsVertical(mGravity, mRadius, mCenter, mPeekDistance)
         return by
     }
 
     override fun scrollHorizontallyBy(
-            dx: Int,
-            recycler: Recycler,
-            state: RecyclerView.State): Int {
+        dx: Int,
+        recycler: Recycler,
+        state: RecyclerView.State
+    ): Int {
         val by = super.scrollHorizontallyBy(dx, recycler, state)
         setChildOffsetsHorizontal(mGravity, mRadius, mCenter, mPeekDistance)
         return by
     }
 
     override fun onLayoutChildren(
-            recycler: Recycler,
-            state: RecyclerView.State) {
+        recycler: Recycler,
+        state: RecyclerView.State
+    ) {
         super.onLayoutChildren(recycler, state)
         mCenter = deriveCenter(mGravity, orientation, mRadius, mPeekDistance, mCenter)
         setChildOffsets(mGravity, orientation, mRadius, mCenter, mPeekDistance)
@@ -125,11 +149,13 @@ class CircularLayoutManager : LinearLayoutManager {
      * around which this layout manager should arrange list items.  Place the resulting coordinates
      * into `out`, to avoid reallocation.
      */
-    private fun deriveCenter(@Gravity gravity: Int,
-                             orientation: Int,
-                             @Dimension radius: Int,
-                             @Dimension peekDistance: Int,
-                             out: Point): Point {
+    private fun deriveCenter(
+        @Gravity gravity: Int,
+        orientation: Int,
+        @Dimension radius: Int,
+        @Dimension peekDistance: Int,
+        out: Point
+    ): Point {
 
         val gravitySign = if (gravity == Gravity.START) -1 else 1
         val distanceMultiplier = if (gravity == Gravity.START) 0 else 1
@@ -137,16 +163,22 @@ class CircularLayoutManager : LinearLayoutManager {
         val (x, y) = when (orientation) {
 
             Orientation.HORIZONTAL ->
-                Pair(width / 2,
-                        distanceMultiplier * height + gravitySign * abs(radius - peekDistance))
+                Pair(
+                    width / 2,
+                    distanceMultiplier * height + gravitySign * abs(radius - peekDistance)
+                )
 
             Orientation.VERTICAL ->
-                Pair(distanceMultiplier * width + gravitySign * abs(radius - peekDistance),
-                        height / 2)
+                Pair(
+                    distanceMultiplier * width + gravitySign * abs(radius - peekDistance),
+                    height / 2
+                )
 
             else ->
-                Pair(distanceMultiplier * width + gravitySign * abs(radius - peekDistance),
-                        height / 2)
+                Pair(
+                    distanceMultiplier * width + gravitySign * abs(radius - peekDistance),
+                    height / 2
+                )
 
         }
 
@@ -158,10 +190,12 @@ class CircularLayoutManager : LinearLayoutManager {
      * Find the absolute horizontal distance by which a view at `viewY` should offset
      * to align with the circle `center` with `radius`, accounting for `peekDistance`.
      */
-    private fun resolveOffsetX(radius: Double,
-                               viewY: Double,
-                               center: Point,
-                               peekDistance: Int): Double {
+    private fun resolveOffsetX(
+        radius: Double,
+        viewY: Double,
+        center: Point,
+        peekDistance: Int
+    ): Double {
         val opposite = abs(center.y - viewY)
         val radiusSquared = radius * radius
         val oppositeSquared = opposite * opposite
@@ -173,10 +207,12 @@ class CircularLayoutManager : LinearLayoutManager {
      * Find the absolute vertical distance by which a view at `viewX` should offset to
      * align with the circle `center` with `radius`, account for `peekDistance`.
      */
-    private fun resolveOffsetY(radius: Double,
-                               viewX: Double,
-                               center: Point,
-                               peekDistance: Int): Double {
+    private fun resolveOffsetY(
+        radius: Double,
+        viewX: Double,
+        center: Point,
+        peekDistance: Int
+    ): Double {
         val adjacent = abs(center.x - viewX)
         val radiusSquared = radius * radius
         val adjacentSquared = adjacent * adjacent
@@ -190,11 +226,13 @@ class CircularLayoutManager : LinearLayoutManager {
      * @see .setChildOffsetsVertical
      * @see .setChildOffsetsHorizontal
      */
-    private fun setChildOffsets(@Gravity gravity: Int,
-                                orientation: Int,
-                                @Dimension radius: Int,
-                                center: Point,
-                                peekDistance: Int) {
+    private fun setChildOffsets(
+        @Gravity gravity: Int,
+        orientation: Int,
+        @Dimension radius: Int,
+        center: Point,
+        peekDistance: Int
+    ) {
         if (orientation == VERTICAL) {
             setChildOffsetsVertical(gravity, radius, center, peekDistance)
         } else if (orientation == HORIZONTAL) {
@@ -205,19 +243,22 @@ class CircularLayoutManager : LinearLayoutManager {
     /**
      * Set the bumper offsets on child views for [Orientation.VERTICAL]
      */
-    private fun setChildOffsetsVertical(@Gravity gravity: Int,
-                                        @Dimension radius: Int,
-                                        center: Point,
-                                        peekDistance: Int) {
+    private fun setChildOffsetsVertical(
+        @Gravity gravity: Int,
+        @Dimension radius: Int,
+        center: Point,
+        peekDistance: Int
+    ) {
 
         (0 until childCount).forEach { i ->
             val child = getChildAt(i)
             val layoutParams = child?.layoutParams as RecyclerView.LayoutParams
             val xOffset = resolveOffsetX(
-                    radius.toDouble(),
-                    child.y + child.height / 2.0f.toDouble(),
-                    center,
-                    peekDistance).toInt()
+                radius.toDouble(),
+                child.y + child.height / 2.0f.toDouble(),
+                center,
+                peekDistance
+            ).toInt()
             val x = if (gravity == Gravity.START) {
                 xOffset + getMarginStart(layoutParams)
             } else {
@@ -231,10 +272,12 @@ class CircularLayoutManager : LinearLayoutManager {
     /**
      * Given that the is [Orientation.VERTICAL], apply rotation if rotation is enabled.
      */
-    private fun setChildRotationVertical(@Gravity gravity: Int,
-                                         child: View?,
-                                         radius: Int,
-                                         center: Point) {
+    private fun setChildRotationVertical(
+        @Gravity gravity: Int,
+        child: View?,
+        radius: Int,
+        center: Point
+    ) {
 
         if (mIsRotating.not()) {
             child?.rotation = 0f
@@ -247,24 +290,29 @@ class CircularLayoutManager : LinearLayoutManager {
             (if (childPastCenter) 1 else -1).toFloat()
         }
         val opposite = abs(child.y + child.height / 2.0f - center.y)
-        child.rotation = (directionMult * Math.toDegrees(asin(opposite / radius.toDouble()))).toFloat()
+        child.rotation =
+            (directionMult * Math.toDegrees(asin(opposite / radius.toDouble()))).toFloat()
     }
 
     /**
      * Set bumper offsets on child views for [Orientation.HORIZONTAL]
      */
-    private fun setChildOffsetsHorizontal(@Gravity gravity: Int,
-                                          @Dimension radius: Int,
-                                          center: Point,
-                                          peekDistance: Int) {
+    private fun setChildOffsetsHorizontal(
+        @Gravity gravity: Int,
+        @Dimension radius: Int,
+        center: Point,
+        peekDistance: Int
+    ) {
 
         (0 until childCount).forEach { i ->
             val child = getChildAt(i)
             val layoutParams = child?.layoutParams as RecyclerView.LayoutParams
-            val yOffset = resolveOffsetY(radius.toDouble(),
-                    child.x + child.width / 2.0f.toDouble(),
-                    center,
-                    peekDistance).toInt()
+            val yOffset = resolveOffsetY(
+                radius.toDouble(),
+                child.x + child.width / 2.0f.toDouble(),
+                center,
+                peekDistance
+            ).toInt()
 
             val y = if (gravity == Gravity.START) {
                 yOffset + getMarginStart(layoutParams)
@@ -279,10 +327,12 @@ class CircularLayoutManager : LinearLayoutManager {
     /**
      * Given that the orientation is [Orientation.HORIZONTAL], apply rotation if enabled.
      */
-    private fun setChildRotationHorizontal(@Gravity gravity: Int,
-                                           child: View?,
-                                           radius: Int,
-                                           center: Point) {
+    private fun setChildRotationHorizontal(
+        @Gravity gravity: Int,
+        child: View?,
+        radius: Int,
+        center: Point
+    ) {
         if (mIsRotating.not()) {
             child?.rotation = 0f
             return
@@ -295,7 +345,8 @@ class CircularLayoutManager : LinearLayoutManager {
             (if (childPastCenter) -1 else 1).toFloat()
         }
         val opposite = abs(child.x + child.width / 2.0f - center.x)
-        child.rotation = (directionMult * Math.toDegrees(asin(opposite / radius.toDouble()))).toFloat()
+        child.rotation =
+            (directionMult * Math.toDegrees(asin(opposite / radius.toDouble()))).toFloat()
     }
 
     /**
