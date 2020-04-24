@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+ext {
+    bintrayRepo = 'CircularLayoutManager'
+    bintrayName = 'CircularLayoutManager'
+
+    publishedGroupId = 'com.darklabs'
+    libraryName = 'CircularLayoutManager'
+    artifact = 'circularLayoutManager'
+
+    libraryDescription = 'A layout manager to display the data in circular fashion. ' +
+            'Works with existing RecyclerView, no need to add any view'
+
+    siteUrl = 'https://github.com/rooparsh/CircularLayoutManager'
+    gitUrl = 'https://github.com/rooparsh/CircularLayoutManager.git'
+
+    libraryVersion = '0.0.1.1'
+
+    developerId = 'darkLord'
+    developerName = 'Rooparsh Kalia'
+    developerEmail = 'rooparshkalia@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 29
+        versionCode 1
+        versionName "0.0.0.1"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    tasks.withType(Javadoc).all {
+        enabled = false
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+}
+
+apply from: 'https://raw.githubusercontent.com/rooparsh/bintrayhelper/master/script.gradle'

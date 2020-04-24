@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RecyclerView">
+
+        <attr name="orientation" format="enum">
+            <enum name="vertical" value="1" />
+            <enum name="horizontal" value="0" />
+        </attr>
+
+        <attr name="gravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+        </attr>
+
+        <attr name="isRotating" format="boolean" />
+
+        <attr name="peekDistance" format="dimension" />
+
+        <attr name="radius" format="dimension" />
+
+    </declare-styleable>
+</resources>

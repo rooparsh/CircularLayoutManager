@@ -1,0 +1,3 @@
+rootProject.name='Circular Recycler'
+include ':app'
+include ':circularLayoutManager'
