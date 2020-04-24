@@ -41,19 +41,9 @@
   Default is `false`</td>
   </tr>
   <tr>
-  <td>app:ticketScallopPositionPercent="50"</td>
-  <td>50</td>
-  <td>sets position of scallop and divider</td>
-  </tr>
-  <tr>
   <td>peekDistance</td>
   <td>integer</td>
   <td>The distance at which layout will start getting placed. Default is 500</td>
-  </tr>
-  <tr>
-  <td>app:ticketBorderWidth="4dp"</td>
-  <td>2dp</td>
-  <td>sets border width</td>
   </tr>
   <tr>
   <td>radius</td>
