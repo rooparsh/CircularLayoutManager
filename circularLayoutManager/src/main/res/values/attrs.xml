@@ -12,11 +12,19 @@
             <enum name="end" value="1" />
         </attr>
 
-        <attr name="isRotating" format="boolean" />
+        <attr name="rotating" format="boolean" />
 
-        <attr name="peekDistance" format="dimension" />
+        <attr name="peekDistance" format="integer" />
 
-        <attr name="radius" format="dimension" />
+        <attr name="radius" format="integer" />
+
+        <attr name="scalingFactor" format="integer">
+            <enum name="none" value="0" />
+            <enum name="half" value="5" />
+            <enum name="full" value="10" />
+        </attr>
+
+        <attr name="scaling" format="boolean" />
 
     </declare-styleable>
 </resources>

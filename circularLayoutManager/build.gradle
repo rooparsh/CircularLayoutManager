@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/rooparsh/CircularLayoutManager'
     gitUrl = 'https://github.com/rooparsh/CircularLayoutManager.git'
 
-    libraryVersion = '0.0.1.1'
+    libraryVersion = '0.0.1.2'
 
     developerId = 'darkLord'
     developerName = 'Rooparsh Kalia'

@@ -1,5 +1,6 @@
 package com.darklabs.circularview
 
+import androidx.annotation.FloatRange
 import androidx.annotation.IntDef
 import androidx.recyclerview.widget.RecyclerView
 

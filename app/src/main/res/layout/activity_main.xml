@@ -14,6 +14,9 @@
         app:layoutManager="com.darklabs.circularview.CircularLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:orientation="vertical" />
+        app:orientation="horizontal"
+        app:peekDistance="200"
+        app:radius="1000"
+        app:scaling="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
